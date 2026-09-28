@@ -28,7 +28,7 @@ export default function LandingPage() {
           </div>
 
           {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-4 pt-4">
             <Link
               to="/voice"
               className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-blue-950 font-black py-4 px-8 rounded-2xl text-lg shadow-lg hover:shadow-orange-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3"
@@ -43,6 +43,14 @@ export default function LandingPage() {
             >
               <span>📝</span>
               <span>{t('btnStartForm')}</span>
+            </Link>
+
+            <Link
+              to="/resume"
+              className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-md transition-all flex items-center justify-center gap-2"
+            >
+              <span>📄</span>
+              <span>Build a resume</span>
             </Link>
 
             <Link

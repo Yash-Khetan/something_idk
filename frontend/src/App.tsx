@@ -8,6 +8,7 @@ import ProfileSummary from './pages/ProfileSummary';
 import OpportunitiesPage from './pages/OpportunitiesPage';
 import WhatsAppSimulatorPage from './pages/WhatsAppSimulatorPage';
 import AdminPage from './pages/AdminPage';
+import ResumeBuilderPage from './pages/ResumeBuilderPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/voice" element={<VoiceAssistantPage />} />
+              <Route path="/resume" element={<ResumeBuilderPage />} />
               <Route path="/profile" element={<ProfileForm />} />
               <Route path="/profile/:id" element={<ProfileSummary />} />
               <Route path="/opportunities" element={<OpportunitiesPage />} />

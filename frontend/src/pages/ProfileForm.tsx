@@ -1,20 +1,38 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import { AudioPlayerButton } from '../components/AudioPlayerButton';
 
 const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", 
-  "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", 
-  "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", 
-  "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", 
-  "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+  "Maharashtra", "Uttar Pradesh", "Bihar", "Delhi", "Andhra Pradesh", "Arunachal Pradesh", "Assam", 
+  "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+  "Kerala", "Madhya Pradesh", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttarakhand", "West Bengal"
 ];
 
 export default function ProfileForm() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    language: language,
+    state: 'Maharashtra',
+    district: '',
+    education: '10th Pass',
+    currentOccupation: '',
+    interests: '',
+    mobility: 'Willing to travel within district',
+    employmentPreference: 'Either',
+    category: 'SC',
+    gender: 'Male',
+    annualIncomeTier: '< 1 Lakh'
+  });
 
   const validatePhone = (phone: string) => {
     if (phone && !/^\d{10}$/.test(phone)) {
@@ -23,17 +41,19 @@ export default function ProfileForm() {
     return '';
   };
 
+  const handleChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (field === 'phone') {
+      setPhoneError(validatePhone(value));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
-    setPhoneError('');
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    // Validation
-    const phoneValidation = validatePhone(data.phone as string);
+    const phoneValidation = validatePhone(formData.phone);
     if (phoneValidation) {
       setPhoneError(phoneValidation);
       setIsSubmitting(false);
@@ -44,7 +64,7 @@ export default function ProfileForm() {
       const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/beneficiaries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -60,62 +80,98 @@ export default function ProfileForm() {
     }
   };
 
-  const inputClass = "w-full p-3 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50 hover:bg-gray-50 transition-colors";
-  const labelClass = "block text-sm font-semibold text-gray-700 mb-1.5";
-  const sectionClass = "bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6";
+  const inputClass = "w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-sm";
+  const labelClass = "block text-xs font-bold text-gray-700 uppercase mb-1.5";
+  const sectionClass = "bg-white p-6 rounded-3xl shadow-sm border border-gray-200 mb-6";
 
   return (
-    <div className="max-w-3xl mx-auto py-4">
-      <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Your Profile</h2>
-        <p className="text-gray-500">Tell us about yourself to find the best opportunities.</p>
+    <div className="max-w-3xl mx-auto py-6 px-2 sm:px-4">
+      <div className="mb-8 text-center space-y-2">
+        <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-xs font-bold">
+          <span>📝</span>
+          <span>PM-AJAY Direct Beneficiary Profiler</span>
+        </div>
+        <h2 className="text-3xl font-extrabold text-gray-900">
+          Create Beneficiary Profile
+        </h2>
+        <p className="text-sm text-gray-500 max-w-lg mx-auto">
+          Fill in details below to match with 100% free NSQF skill training and ₹50,000 PM-AJAY capital subsidies.
+        </p>
       </div>
-      
+
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm mb-6 flex items-center">
-          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-sm mb-6 flex items-center">
+          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
-        
         {/* Personal Details */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Personal Details</h3>
-          <div className="space-y-5">
+          <h3 className="text-base font-extrabold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex items-center justify-between">
+            <span>Personal & Demographic Details</span>
+            <AudioPlayerButton textToSpeak="Please enter your full name, phone number, gender, and preferred language." size="sm" />
+          </h3>
+
+          <div className="space-y-4">
             <div>
               <label htmlFor="name" className={labelClass}>Full Name <span className="text-red-500">*</span></label>
-              <input type="text" id="name" name="name" required className={inputClass} placeholder="Enter your full name" />
+              <input
+                type="text"
+                id="name"
+                required
+                value={formData.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                className={inputClass}
+                placeholder="e.g. Ramesh Kumar / Sunita Devi"
+              />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label htmlFor="phone" className={labelClass}>Mobile Number</label>
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  name="phone" 
+                <input
+                  type="tel"
+                  id="phone"
                   maxLength={10}
-                  className={`${inputClass} ${phoneError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`} 
-                  placeholder="10-digit number" 
-                  onChange={(e) => setPhoneError(validatePhone(e.target.value))}
+                  value={formData.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  className={`${inputClass} ${phoneError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="10-digit number"
                 />
-                {phoneError && <p className="text-red-500 text-xs mt-1.5">{phoneError}</p>}
+                {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
               </div>
 
               <div>
                 <label htmlFor="language" className={labelClass}>Preferred Language <span className="text-red-500">*</span></label>
-                <select id="language" name="language" required className={inputClass}>
-                  <option value="">Select Language</option>
-                  <option value="Hindi">Hindi</option>
+                <select
+                  id="language"
+                  required
+                  value={formData.language}
+                  onChange={(e) => handleChange('language', e.target.value)}
+                  className={inputClass}
+                >
+                  <option value="Hindi">हिंदी (Hindi)</option>
+                  <option value="Marathi">मराठी (Marathi)</option>
                   <option value="English">English</option>
-                  <option value="Marathi">Marathi</option>
-                  <option value="Telugu">Telugu</option>
-                  <option value="Tamil">Tamil</option>
-                  <option value="Gujarati">Gujarati</option>
-                  <option value="Urdu">Urdu</option>
-                  <option value="Bengali">Bengali</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="category" className={labelClass}>Category (PM-AJAY Target)</label>
+                <select
+                  id="category"
+                  value={formData.category}
+                  onChange={(e) => handleChange('category', e.target.value)}
+                  className={inputClass}
+                >
+                  <option value="SC">Scheduled Caste (SC - Primary)</option>
+                  <option value="ST">Scheduled Tribe (ST)</option>
+                  <option value="OBC">OBC</option>
+                  <option value="General">General</option>
                 </select>
               </div>
             </div>
@@ -124,65 +180,109 @@ export default function ProfileForm() {
 
         {/* Location */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Location</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <h3 className="text-base font-extrabold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex items-center justify-between">
+            <span>Location</span>
+            <AudioPlayerButton textToSpeak="Select your state and district to find nearby training centers and jobs." size="sm" />
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="state" className={labelClass}>State</label>
-              <select id="state" name="state" className={inputClass}>
-                <option value="">Select State</option>
-                {INDIAN_STATES.map(state => (
-                  <option key={state} value={state}>{state}</option>
+              <select
+                id="state"
+                value={formData.state}
+                onChange={(e) => handleChange('state', e.target.value)}
+                className={inputClass}
+              >
+                {INDIAN_STATES.map(st => (
+                  <option key={st} value={st}>{st}</option>
                 ))}
               </select>
             </div>
             <div>
               <label htmlFor="district" className={labelClass}>District</label>
-              <input type="text" id="district" name="district" className={inputClass} placeholder="Enter your district" />
+              <input
+                type="text"
+                id="district"
+                value={formData.district}
+                onChange={(e) => handleChange('district', e.target.value)}
+                className={inputClass}
+                placeholder="e.g. Pune / Varanasi / Nagpur / Patna"
+              />
             </div>
           </div>
         </div>
 
         {/* Education & Skills */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Education & Work</h3>
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <h3 className="text-base font-extrabold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex items-center justify-between">
+            <span>Education & Trade Interests</span>
+            <AudioPlayerButton textToSpeak="Tell us your highest education level and trades or skills you are interested in." size="sm" />
+          </h3>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="education" className={labelClass}>Highest Education</label>
-                <select id="education" name="education" className={inputClass}>
-                  <option value="">Select Education</option>
+                <select
+                  id="education"
+                  value={formData.education}
+                  onChange={(e) => handleChange('education', e.target.value)}
+                  className={inputClass}
+                >
                   <option value="Below 8th Standard">Below 8th Standard</option>
                   <option value="8th Pass">8th Pass</option>
                   <option value="10th Pass">10th Pass</option>
                   <option value="12th Pass">12th Pass</option>
                   <option value="ITI / Diploma">ITI / Diploma</option>
                   <option value="Graduate">Graduate</option>
-                  <option value="Post Graduate">Post Graduate</option>
                 </select>
               </div>
 
               <div>
                 <label htmlFor="currentOccupation" className={labelClass}>Current Occupation</label>
-                <input type="text" id="currentOccupation" name="currentOccupation" placeholder="e.g., Daily Wager, Student" className={inputClass} />
+                <input
+                  type="text"
+                  id="currentOccupation"
+                  value={formData.currentOccupation}
+                  onChange={(e) => handleChange('currentOccupation', e.target.value)}
+                  placeholder="e.g. Daily wage worker, Homemaker, Student"
+                  className={inputClass}
+                />
               </div>
             </div>
 
             <div>
-              <label htmlFor="interests" className={labelClass}>Interests & Skills</label>
-              <input type="text" id="interests" name="interests" placeholder="e.g., Tailoring, Data Entry, Driving, Plumbing" className={inputClass} />
+              <label htmlFor="interests" className={labelClass}>Trades & Skills of Interest</label>
+              <input
+                type="text"
+                id="interests"
+                value={formData.interests}
+                onChange={(e) => handleChange('interests', e.target.value)}
+                placeholder="e.g. Tailoring, Solar Panel Technician, Electrician, Data Entry, Bike Repair, Plumbing"
+                className={inputClass}
+              />
             </div>
           </div>
         </div>
 
         {/* Preferences */}
         <div className={sectionClass}>
-          <h3 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Preferences</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <h3 className="text-base font-extrabold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex items-center justify-between">
+            <span>Livelihood Preferences</span>
+            <AudioPlayerButton textToSpeak="Choose your travel willingness and whether you prefer a monthly salary job or starting your own business." size="sm" />
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="mobility" className={labelClass}>Willingness to Travel</label>
-              <select id="mobility" name="mobility" className={inputClass}>
-                <option value="">Select Option</option>
-                <option value="Cannot travel far">Cannot travel far</option>
+              <select
+                id="mobility"
+                value={formData.mobility}
+                onChange={(e) => handleChange('mobility', e.target.value)}
+                className={inputClass}
+              >
+                <option value="Cannot travel far">Cannot travel far (Near home)</option>
                 <option value="Willing to travel within district">Willing to travel within district</option>
                 <option value="Willing to travel within state">Willing to travel within state</option>
                 <option value="Willing to relocate anywhere">Willing to relocate anywhere</option>
@@ -191,31 +291,27 @@ export default function ProfileForm() {
 
             <div>
               <label htmlFor="employmentPreference" className={labelClass}>Employment Preference</label>
-              <select id="employmentPreference" name="employmentPreference" className={inputClass}>
-                <option value="">Select Preference</option>
-                <option value="Job">Job</option>
-                <option value="Self-employment">Self-employment</option>
-                <option value="Either">Either</option>
+              <select
+                id="employmentPreference"
+                value={formData.employmentPreference}
+                onChange={(e) => handleChange('employmentPreference', e.target.value)}
+                className={inputClass}
+              >
+                <option value="Either">Either (Jobs or Business)</option>
+                <option value="Job">Monthly Wage Employment (Job)</option>
+                <option value="Self-employment">Self-Employment Enterprise (₹50k Grant)</option>
               </select>
             </div>
           </div>
         </div>
 
-        <div className="pt-2 pb-12 text-right">
-          <button 
-            type="submit" 
+        <div className="pt-2 pb-12 flex justify-end">
+          <button
+            type="submit"
             disabled={isSubmitting || !!phoneError}
-            className="w-full md:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-150 ease-in-out shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white font-black py-4 px-10 rounded-2xl text-base shadow-lg transition-all disabled:opacity-50"
           >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Creating Profile...
-              </span>
-            ) : 'Create My Profile'}
+            {isSubmitting ? 'Matching NSQF Courses...' : 'Generate My NSQF Roadmap 🚀'}
           </button>
         </div>
       </form>

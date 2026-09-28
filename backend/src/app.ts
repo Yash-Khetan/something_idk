@@ -2,6 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { ZodError } from 'zod';
 import beneficiaryRoutes from './routes/beneficiaries';
+import conversationRoutes from './routes/conversation';
+import opportunityRoutes from './routes/opportunities';
+import whatsappRoutes from './routes/whatsapp';
 
 const app = express();
 
@@ -20,11 +23,17 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     status: 'ok',
-    service: 'pm-ajay-backend'
+    service: 'pm-ajay-backend',
+    version: '2.0.0',
+    nsqfIntegration: 'active',
+    regionalLanguages: ['English', 'Hindi', 'Marathi']
   });
 });
 
 app.use('/api/beneficiaries', beneficiaryRoutes);
+app.use('/api/conversation', conversationRoutes);
+app.use('/api/opportunities', opportunityRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 // Centralized error handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -37,3 +46,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 export default app;
+

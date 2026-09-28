@@ -283,7 +283,7 @@ export default function VoiceAssistantPage() {
   return (
     <div className="max-w-6xl mx-auto py-2 px-2 sm:px-4">
       {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-5 rounded-2xl shadow-md mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="page-banner bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-5 rounded-2xl shadow-md mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-400 text-blue-950 uppercase tracking-wide">

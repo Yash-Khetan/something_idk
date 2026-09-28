@@ -66,7 +66,7 @@ export default function ProfileSummary() {
   return (
     <div className="max-w-5xl mx-auto py-6 space-y-8 px-2 sm:px-4">
       {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-6 rounded-3xl shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="page-banner bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-6 rounded-3xl shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold mb-2">
             <span>🇮🇳</span>

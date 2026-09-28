@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <div className="py-6 sm:py-10 space-y-12">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-blue-900 via-indigo-950 to-blue-950 text-white rounded-3xl p-6 sm:p-12 shadow-xl border border-blue-800">
+      <section className="page-banner landing-banner relative overflow-hidden bg-gradient-to-b from-blue-900 via-indigo-950 to-blue-950 text-white rounded-3xl p-6 sm:p-12 shadow-xl border border-blue-800">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 text-amber-300 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold tracking-wide">
             <span>🇮🇳</span>
@@ -50,7 +50,7 @@ export default function LandingPage() {
               className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-md transition-all flex items-center justify-center gap-2"
             >
               <span>📄</span>
-              <span>Build a resume</span>
+              <span>{t('btnBuildResume')}</span>
             </Link>
 
             <Link

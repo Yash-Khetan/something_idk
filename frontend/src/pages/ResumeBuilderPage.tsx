@@ -228,7 +228,7 @@ export default function ResumeBuilderPage() {
 
   return (
     <div className="resume-builder-page mx-auto max-w-7xl space-y-6 py-4 sm:py-8">
-      <header className="no-print flex flex-col gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <header className="page-heading no-print flex flex-col gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase text-teal-800">Career tools</p>
           <h1 className="mt-1 text-3xl font-black text-gray-950">Resume Builder</h1>

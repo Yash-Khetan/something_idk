@@ -6,6 +6,7 @@ export interface FrontendTranslations {
   navHome: string;
   navVoiceAssistant: string;
   navManualForm: string;
+  navResume: string;
   navOpportunities: string;
   navWhatsApp: string;
   navAdmin: string;
@@ -14,6 +15,7 @@ export interface FrontendTranslations {
   heroDesc: string;
   btnStartVoice: string;
   btnStartForm: string;
+  btnBuildResume: string;
   btnWhatsAppBot: string;
   btnListenAudio: string;
   btnStopAudio: string;
@@ -66,6 +68,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     navHome: "Home",
     navVoiceAssistant: "Voice Assistant 🎙️",
     navManualForm: "Form 📝",
+    navResume: "Resume",
     navOpportunities: "Opportunities 💼",
     navWhatsApp: "WhatsApp Bot 💬",
     navAdmin: "Dashboard 📊",
@@ -74,6 +77,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     heroDesc: "Speak in your own language (Hindi, Marathi, or English) to discover 100% free government-sponsored NSQF certified training, ₹50,000 enterprise grant subsidies, and local jobs.",
     btnStartVoice: "Talk to Voice Assistant 🎙️",
     btnStartForm: "Fill Simple Form 📝",
+    btnBuildResume: "Build a resume",
     btnWhatsAppBot: "WhatsApp Voice Note 💬",
     btnListenAudio: "Listen in Voice 🔊",
     btnStopAudio: "Stop Voice ⏹️",
@@ -124,6 +128,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     navHome: "मुख्य पृष्ठ",
     navVoiceAssistant: "वॉइस सहायक 🎙️",
     navManualForm: "फ़ॉर्म 📝",
+    navResume: "रिज़्यूमे",
     navOpportunities: "अवसर 💼",
     navWhatsApp: "व्हाट्सएप बॉट 💬",
     navAdmin: "डैशबोर्ड 📊",
@@ -132,6 +137,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     heroDesc: "अपनी मातृभाषा (हिंदी, मराठी या अंग्रेजी) में बोलकर 100% निःशुल्क सरकारी NSQF प्रशिक्षण, ₹50,000 तक की उद्यम अनुदान सब्सिडी और नजदीकी नौकरियां खोजें।",
     btnStartVoice: "वॉइस सहायक से बात करें 🎙️",
     btnStartForm: "सरल फ़ॉर्म भरें 📝",
+    btnBuildResume: "रिज़्यूमे बनाएँ",
     btnWhatsAppBot: "व्हाट्सएप वॉइस नोट 💬",
     btnListenAudio: "आवाज में सुनें 🔊",
     btnStopAudio: "आवाज रोकें ⏹️",
@@ -182,6 +188,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     navHome: "मुख्य पृष्ठ",
     navVoiceAssistant: "व्हॉइस सहाय्यक 🎙️",
     navManualForm: "अर्ज 📝",
+    navResume: "रिझ्युमे",
     navOpportunities: "संधी 💼",
     navWhatsApp: "व्हॉट्सॲप बॉट 💬",
     navAdmin: "डॅशबोर्ड 📊",
@@ -190,6 +197,7 @@ export const frontendTranslations: Record<SupportedLanguage, FrontendTranslation
     heroDesc: "आपल्या स्वतःच्या भाषेत (मराठी, हिंदी किंवा इंग्रजी) बोलून १००% मोफत शासकीय NSQF प्रशिक्षण, ₹५०,००० व्यवसाय भांडवली अनुदान आणि स्थानिक रोजगाराच्या संधी शोधा.",
     btnStartVoice: "व्हॉइस सहाय्यकाशी बोला 🎙️",
     btnStartForm: "साधा फॉर्म भरा 📝",
+    btnBuildResume: "रिझ्युमे तयार करा",
     btnWhatsAppBot: "व्हॉट्सॲप व्हॉइस नोट 💬",
     btnListenAudio: "आवाजात ऐका 🔊",
     btnStopAudio: "आवाज थांबवा ⏹️",

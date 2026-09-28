@@ -8,8 +8,9 @@ export const Navbar = () => {
 
   const navLinks = [
     { to: '/', label: t('navHome'), icon: '🏠' },
-    { to: '/voice', label: t('navVoiceAssistant'), icon: '🎙️', highlight: true },
+    { to: '/voice', label: t('navVoiceAssistant'), icon: '🎙️' },
     { to: '/profile', label: t('navManualForm'), icon: '📝' },
+    { to: '/resume', label: t('navResume'), icon: '📄' },
     { to: '/opportunities', label: t('navOpportunities'), icon: '💼' },
     { to: '/whatsapp-simulator', label: t('navWhatsApp'), icon: '💬' },
     { to: '/admin', label: t('navAdmin'), icon: '📊' },
@@ -22,67 +23,46 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      {/* Top Govt Scheme Bar */}
-      <div className="bg-gradient-to-r from-orange-600 via-white to-green-700 h-1"></div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo & Portal Branding */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center text-white font-bold text-lg shadow-sm border border-blue-950">
-              <span className="text-amber-400">PM</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-gray-900 tracking-tight text-lg group-hover:text-blue-700 transition-colors">
-                  {t('portalTitle')}
-                </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold bg-amber-100 text-amber-800 rounded border border-amber-200">
-                  NSQF + GIA
-                </span>
-              </div>
-              <p className="text-xs text-gray-500 hidden md:block">
-                {t('portalSubtitle')}
-              </p>
-            </div>
+    <header className="site-header sticky top-0 z-50">
+      <div className="site-header-inner">
+        <div className="site-header-row">
+          <Link to="/" className="site-brand">
+            <span className="site-brand-mark" aria-hidden="true">PM</span>
+            <span className="site-brand-copy">
+              <span className="site-brand-title">{t('portalTitle')}</span>
+              <span className="site-brand-subtitle">{t('portalSubtitle')}</span>
+            </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="site-nav-desktop" aria-label="Main navigation">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.to;
+              const isActive = link.to === '/'
+                ? location.pathname === '/'
+                : location.pathname === link.to || location.pathname.startsWith(`${link.to}/`);
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-blue-700 text-white shadow-sm'
-                      : link.highlight
-                      ? 'bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300 font-semibold'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`site-nav-link${isActive ? ' is-active' : ''}`}
                 >
-                  <span>{link.icon}</span>
+                  <span className="site-nav-icon" aria-hidden="true">{link.icon}</span>
                   <span>{link.label}</span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Regional Language Switcher */}
-          <div className="flex items-center gap-2">
-            <div className="bg-gray-100 p-1 rounded-lg border border-gray-200 flex items-center gap-1 shadow-inner">
+          <div className="site-language-group" role="group" aria-label="Choose language">
+            <span className="site-language-label">Language</span>
+            <div className="site-language-switcher">
               {languages.map((l) => (
                 <button
                   key={l.code}
                   onClick={() => setLanguage(l.code)}
-                  className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${
-                    language === l.code
-                      ? 'bg-blue-800 text-white shadow'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
-                  }`}
+                  type="button"
+                  aria-pressed={language === l.code}
+                  className={`site-language-option${language === l.code ? ' is-active' : ''}`}
                   title={`Switch to ${l.label}`}
                 >
                   {l.script}
@@ -93,26 +73,24 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Sub-Navigation Bar */}
-      <div className="lg:hidden border-t border-gray-100 bg-gray-50 overflow-x-auto py-2 px-3 flex gap-2">
+      <nav className="site-nav-mobile" aria-label="Main navigation">
         {navLinks.map((link) => {
-          const isActive = location.pathname === link.to;
+          const isActive = link.to === '/'
+            ? location.pathname === '/'
+            : location.pathname === link.to || location.pathname.startsWith(`${link.to}/`);
           return (
             <Link
               key={link.to}
               to={link.to}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1 ${
-                isActive
-                  ? 'bg-blue-800 text-white'
-                  : 'bg-white text-gray-700 border border-gray-200 shadow-sm'
-              }`}
+              aria-current={isActive ? 'page' : undefined}
+              className={`site-nav-link${isActive ? ' is-active' : ''}`}
             >
-              <span>{link.icon}</span>
+              <span className="site-nav-icon" aria-hidden="true">{link.icon}</span>
               <span>{link.label}</span>
             </Link>
           );
         })}
-      </div>
+      </nav>
     </header>
   );
 };

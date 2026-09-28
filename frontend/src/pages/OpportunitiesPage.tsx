@@ -69,7 +69,7 @@ export default function OpportunitiesPage() {
   return (
     <div className="max-w-6xl mx-auto py-6 space-y-8 px-2 sm:px-4">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-md">
+      <div className="page-banner bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-md">
         <div className="max-w-3xl">
           <span className="text-xs font-bold uppercase tracking-wider bg-amber-400/20 text-amber-300 px-3 py-1 rounded-full">
             Database-Driven Opportunities

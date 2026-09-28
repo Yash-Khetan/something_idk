@@ -68,7 +68,7 @@ export default function WhatsAppSimulatorPage() {
   return (
     <div className="max-w-6xl mx-auto py-4 sm:py-6 space-y-6 px-2 sm:px-4">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-6 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="page-banner bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-6 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 bg-emerald-400/20 text-emerald-200 px-3 py-1 rounded-full text-xs font-bold mb-2">
             <span>💬</span>

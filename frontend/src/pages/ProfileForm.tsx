@@ -86,7 +86,7 @@ export default function ProfileForm() {
 
   return (
     <div className="max-w-3xl mx-auto py-6 px-2 sm:px-4">
-      <div className="mb-8 text-center space-y-2">
+      <div className="page-heading mb-8 space-y-2">
         <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-900 px-3 py-1 rounded-full text-xs font-bold">
           <span>📝</span>
           <span>PM-AJAY Direct Beneficiary Profiler</span>

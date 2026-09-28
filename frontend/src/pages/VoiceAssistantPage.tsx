@@ -34,8 +34,13 @@ export default function VoiceAssistantPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
+  const [microphoneError, setMicrophoneError] = useState('');
 
   const recognitionRef = useRef<any>(null);
+  const transcriptRef = useRef('');
+  const submitAfterRecognitionRef = useRef(false);
+  const recognitionFailedRef = useRef(false);
+  const handleSendMessageRef = useRef<(text: string) => Promise<void>>(async () => {});
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Quick suggestions for low-literacy users in each language
@@ -84,18 +89,40 @@ export default function VoiceAssistantPage() {
       };
 
       recognition.onresult = (event: any) => {
-        const current = event.resultIndex;
-        const text = event.results[current][0].transcript;
+        const text = Array.from(event.results as Iterable<{ 0: { transcript: string } }>)
+          .map(result => result[0].transcript)
+          .join(' ');
+        transcriptRef.current = text;
         setTranscript(text);
       };
 
       recognition.onerror = (event: any) => {
         console.warn('Speech recognition error:', event.error);
+        submitAfterRecognitionRef.current = false;
+        recognitionFailedRef.current = true;
         setIsListening(false);
+        const errors: Record<string, string> = {
+          'not-allowed': 'Microphone access is blocked. Allow microphone access for this site in your browser and device settings, then reload.',
+          'service-not-allowed': 'This browser is blocking its speech-recognition service. Try Chrome or Edge, or use the text input.',
+          'audio-capture': 'No microphone was found. Connect a microphone and try again.',
+          'no-speech': 'No speech was detected. Try speaking closer to the microphone.',
+          network: 'The browser speech-recognition service could not connect. Check your internet connection and try again.'
+        };
+        setMicrophoneError(errors[event.error] || `Speech recognition failed (${event.error}). You can type your response instead.`);
       };
 
       recognition.onend = () => {
         setIsListening(false);
+        const shouldSubmit = submitAfterRecognitionRef.current;
+        submitAfterRecognitionRef.current = false;
+        if (recognitionFailedRef.current) return;
+
+        const finalTranscript = transcriptRef.current.trim();
+        if (finalTranscript) {
+          void handleSendMessageRef.current(finalTranscript);
+        } else if (shouldSubmit) {
+          setMicrophoneError('No speech was captured. Try again or type your response.');
+        }
       };
 
       recognitionRef.current = recognition;
@@ -140,7 +167,16 @@ export default function VoiceAssistantPage() {
 
   const startVoiceInput = () => {
     stopSpeaking();
-    if (!recognitionRef.current) return;
+    setMicrophoneError('');
+    if (!window.isSecureContext) {
+      setMicrophoneError('Microphone access requires HTTPS or localhost. Open the app on localhost or a secure HTTPS address.');
+      return;
+    }
+    if (!recognitionRef.current) {
+      setSpeechSupported(false);
+      setMicrophoneError('Speech recognition is unavailable in this browser. Use the text input instead.');
+      return;
+    }
 
     if (language === 'Hindi') {
       recognitionRef.current.lang = 'hi-IN';
@@ -150,20 +186,22 @@ export default function VoiceAssistantPage() {
       recognitionRef.current.lang = 'en-IN';
     }
 
+    transcriptRef.current = '';
+    submitAfterRecognitionRef.current = false;
+    recognitionFailedRef.current = false;
     setTranscript('');
     try {
       recognitionRef.current.start();
     } catch (e) {
       console.warn('Could not start recognition:', e);
+      setMicrophoneError('Could not start the microphone. Check this site’s microphone permission and try again.');
     }
   };
 
   const stopVoiceInputAndSend = () => {
     if (recognitionRef.current) {
+      submitAfterRecognitionRef.current = true;
       recognitionRef.current.stop();
-    }
-    if (transcript.trim()) {
-      handleSendMessage(transcript.trim());
     }
   };
 
@@ -238,6 +276,10 @@ export default function VoiceAssistantPage() {
     }
   };
 
+  useEffect(() => {
+    handleSendMessageRef.current = handleSendMessage;
+  }, [handleSendMessage]);
+
   return (
     <div className="max-w-6xl mx-auto py-2 px-2 sm:px-4">
       {/* Top Banner Header */}
@@ -269,6 +311,11 @@ export default function VoiceAssistantPage() {
       {!speechSupported && (
         <div className="bg-amber-50 border border-amber-300 text-amber-900 p-3 rounded-xl mb-4 text-xs font-medium">
           Note: Direct microphone speech recognition is recommended in Chrome/Edge. You can also use the text input and quick suggestion chips below.
+        </div>
+      )}
+      {microphoneError && (
+        <div role="alert" className="bg-red-50 border border-red-200 text-red-800 p-3 rounded-xl mb-4 text-sm">
+          {microphoneError}
         </div>
       )}
 
